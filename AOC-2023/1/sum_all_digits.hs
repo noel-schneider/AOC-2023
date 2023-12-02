@@ -2,6 +2,7 @@ import Data.Char (isDigit)
 
 -- Function to extract the first digit of a string
 firstDigit :: String -> Char        -- Empty string has no first digit
+firstDigit [] = '0'                  -- Return '0' when the string is empty
 firstDigit (c:cs) | isDigit c = c  -- If the first character is a digit, return it
                   | otherwise = firstDigit cs  -- Otherwise, check the rest of the string
 
@@ -28,18 +29,18 @@ sumCalibrationValues lines = sum (map stringToInt (calibrationValues lines))
 calibrationValues :: [String] -> [String]
 calibrationValues lines = map calibrationValue lines
 
--- Function to read a file and return its contents as a list of strings
-readFileLines :: FilePath -> IO [String]
-readFileLines path = do
-    contents <- readFile path
-    return (lines contents)
+-- Function to read calibration document from a file
+readCalibrationDocument :: FilePath -> IO [String]
+readCalibrationDocument filePath = lines <$> readFile filePath
 
 
 main :: IO ()
 main = do
-    -- Your calibration document as a list of strings
-    let calibrationDocument = readFileLines "input.txt"
-    putStrLn $ "Document contents: " ++ show calibrationDocument
+    -- Specify the path to your calibration document file
+    let filePath = "input.txt"
+
+    -- Read calibration document from file
+    calibrationDocument <- readCalibrationDocument filePath
 
     -- Calculate and print the sum of calibration values
     let listCalibrationValues = calibrationValues calibrationDocument
